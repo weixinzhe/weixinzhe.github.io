@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>地图画导入坐标判断 · 魏信者我的小站</title>
+  <meta name="description" content="判断地图画的导入坐标是否符合 -64 + 128n 的对齐规则，不符合时给出最近的合法坐标。">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232da44e'/%3E%3Cpath d='M16 8v16M8 16h16' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">🌱 魏信者我的小站</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="back-link"><a href="index.html">← 返回工具列表</a></p>
+      <h1>地图画导入坐标判断</h1>
+      <p class="lead">检查地图画的导入坐标对不对齐，不对齐就给出最近的合法坐标。</p>
+    </section>
+
+    <div class="card">
+      <div class="coord-row">
+        <div class="field">
+          <label for="coord">导入坐标 <span class="hint">x 和 z（逗号或空格分隔）</span></label>
+          <input id="coord" name="coord" type="text" autocomplete="off"
+                 spellcheck="false" placeholder="1000 1000">
+        </div>
+        <button id="check" class="btn-primary" type="button">检测</button>
+      </div>
+
+      <div id="result" class="coord-result" aria-live="polite"></div>
+    </div>
+  </main>
+
+  <script src="js/map-coord.js"></script>
+</body>
+</html>

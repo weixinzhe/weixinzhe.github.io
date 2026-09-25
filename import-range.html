@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>导入范围计算 · 魏信者我的小站</title>
+  <meta name="description" content="输入导入坐标和建筑大小，自动算出导入范围 x1 y1 z1 ~ x2 y2 z2。">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232da44e'/%3E%3Cpath d='M16 8v16M8 16h16' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">🌱 魏信者我的小站</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="back-link"><a href="index.html">← 返回工具列表</a></p>
+      <h1>导入范围计算</h1>
+      <p class="lead">填入导入坐标和建筑大小，自动算出导入范围。</p>
+    </section>
+
+    <div class="card calculator">
+      <div class="calc-grid">
+        <div class="calc-inputs">
+          <div class="field">
+            <label for="origin">导入坐标 <span class="hint">x,y,z</span></label>
+            <input id="origin" name="origin" type="text" autocomplete="off"
+                   spellcheck="false" placeholder="100,64,-200">
+          </div>
+
+          <div class="field">
+            <label for="size">建筑大小 <span class="hint">x长度,y长度,z长度</span></label>
+            <input id="size" name="size" type="text" autocomplete="off"
+                   spellcheck="false" placeholder="10,5,8">
+          </div>
+        </div>
+
+        <div class="result-box" aria-live="polite">
+          <div class="result-head">
+            <span class="result-label">导入范围</span>
+            <button id="copy" class="btn-copy" type="button" disabled>复制</button>
+          </div>
+          <output id="result" class="result-value is-idle">—</output>
+          <p id="status" class="copy-status" aria-live="polite"></p>
+        </div>
+      </div>
+
+      <p id="error" class="msg" role="alert"></p>
+    </div>
+
+    <section class="note">
+      <p class="note-text">导入坐标为起始坐标，建筑从起始坐标开始导入，往 X、Y、Z 的正方向扩散。</p>
+      <div class="note-figure">
+        <svg viewBox="10 34 268 176" role="img"
+             aria-label="三维直角坐标系示意图：建筑从起点 P1 沿 X、Y、Z 正方向扩散到终点 P2，两点之间用虚线长方体框出导入范围">
+          <defs>
+            <marker id="figArrow" viewBox="0 0 8 8" refX="7.4" refY="4"
+                    markerWidth="7" markerHeight="7" markerUnits="userSpaceOnUse"
+                    orient="auto">
+              <path d="M0.6,0.7 L7.4,4 L0.6,7.3 z" fill="#334155"/>
+            </marker>
+            <marker id="figArrowY" viewBox="0 0 8 8" refX="7.4" refY="4"
+                    markerWidth="7" markerHeight="7" markerUnits="userSpaceOnUse"
+                    orient="auto">
+              <path d="M0.6,0.7 L7.4,4 L0.6,7.3 z" fill="#8494a8"/>
+            </marker>
+          </defs>
+
+          <!-- Y 轴：朝屏幕里，先画，被方块压在下面。
+               必须比另外两轴多伸一截，否则箭头会压在方块的框线上 -->
+          <g class="fig-axis-y">
+            <line x1="104" y1="140" x2="192.6" y2="85.6" marker-end="url(#figArrowY)"/>
+          </g>
+
+          <!-- 长方体：可见的三个面（很淡，只为暗示体积） -->
+          <g class="fig-face">
+            <polygon class="fig-face-top"   points="104,98 152,127 196,100 148,71"/>
+            <polygon class="fig-face-left"  points="104,140 152,169 152,127 104,98"/>
+            <polygon class="fig-face-right" points="152,169 196,142 196,100 152,127"/>
+          </g>
+
+          <!-- 被挡住的 3 条棱（都交于远端角点） -->
+          <g class="fig-edge-hidden">
+            <line x1="104" y1="140" x2="148" y2="113"/>
+            <line x1="148" y1="113" x2="148" y2="71"/>
+            <line x1="148" y1="113" x2="196" y2="142"/>
+          </g>
+
+          <!-- 能看见的 9 条棱 -->
+          <g class="fig-edge">
+            <line x1="104" y1="140" x2="152" y2="169"/>
+            <line x1="104" y1="98"  x2="152" y2="127"/>
+            <line x1="148" y1="71"  x2="196" y2="100"/>
+            <line x1="152" y1="169" x2="196" y2="142"/>
+            <line x1="104" y1="98"  x2="148" y2="71"/>
+            <line x1="152" y1="127" x2="196" y2="100"/>
+            <line x1="104" y1="140" x2="104" y2="98"/>
+            <line x1="152" y1="169" x2="152" y2="127"/>
+            <line x1="196" y1="142" x2="196" y2="100"/>
+          </g>
+
+          <!-- X / Z 轴：朝向观察者，压在最上面 -->
+          <g class="fig-axis">
+            <line x1="104" y1="140" x2="189.7" y2="191.8" marker-end="url(#figArrow)"/>
+            <line x1="104" y1="140" x2="104"   y2="54"    marker-end="url(#figArrow)"/>
+          </g>
+
+          <g class="fig-axis-label">
+            <text x="198" y="200">X</text>
+            <text x="110" y="51">Z</text>
+          </g>
+          <g class="fig-axis-label-y">
+            <text x="199" y="78">Y</text>
+          </g>
+
+          <!-- 引线与端点：P2 的标签走右边，避开 Y 轴箭头 -->
+          <g class="fig-leader">
+            <line x1="104" y1="140" x2="84"  y2="140"/>
+            <line x1="196" y1="100" x2="206" y2="100"/>
+          </g>
+          <circle class="fig-dot-start" cx="104" cy="140" r="3.2"/>
+          <circle class="fig-dot-end"   cx="196" cy="100" r="3.2"/>
+
+          <text class="fig-point-label" x="80" y="144" text-anchor="end" xml:space="preserve"><tspan class="fig-point-start">P1</tspan> (x1,y1,z1)</text>
+          <text class="fig-point-label" x="210" y="104" xml:space="preserve"><tspan class="fig-point-end">P2</tspan> (x2,y2,z2)</text>
+        </svg>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/import-range.js"></script>
+</body>
+</html>

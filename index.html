@@ -4,7 +4,48 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>魏信者我的小站</title>
+  <meta name="description" content="魏信者我的小站 —— 一些小工具的汇总。目前有「导入范围计算」和「地图画导入坐标判断」。">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232da44e'/%3E%3Cpath d='M16 8v16M8 16h16' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">🌱 魏信者我的小站</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero home-hero">
+      <h1>魏信者我的小站</h1>
+      <p class="lead">一些自己用的小工具，顺手放在这里。</p>
+    </section>
+
+    <section class="tools">
+      <h2 class="section-title">工具</h2>
+
+      <div class="tool-grid">
+        <a class="tool-card" href="import-range.html">
+          <span class="tool-icon" aria-hidden="true">📐</span>
+          <span class="tool-body">
+            <span class="tool-name">导入范围计算</span>
+            <span class="tool-desc">输入导入坐标和建筑大小，算出导入范围 x1 y1 z1 ~ x2 y2 z2。</span>
+          </span>
+          <span class="tool-go" aria-hidden="true">→</span>
+        </a>
+
+        <a class="tool-card" href="map-coord.html">
+          <span class="tool-icon" aria-hidden="true">🧭</span>
+          <span class="tool-body">
+            <span class="tool-name">地图画导入坐标判断</span>
+            <span class="tool-desc">检查地图画坐标是否符合 -64 + 128n，不符合就给出最近的合法坐标。</span>
+          </span>
+          <span class="tool-go" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
 </body>
 </html>
